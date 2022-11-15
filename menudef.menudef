@@ -1,0 +1,6 @@
+AddOptionMenu "OptionsMenu" {
+    StaticText "=== Night-Lite Options ==="
+    Slider "Cursed Enemy Chance", "nightlite_curse_chance",0.0,1.0,0.05,2
+    Slider "Holy Symbol Chance", "nightlite_symbol_chance",0.0,1.0,0.05,2
+    ScaleSlider "Holy Symbol Cap", "nightlite_symbol_cap",-1,5,1,"Disable Holy Symbol","No Spawn Cap"
+}

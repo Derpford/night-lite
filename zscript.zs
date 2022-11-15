@@ -23,11 +23,13 @@ class CurseHandler : EventHandler {
         }
         
         if (e.thing is "PowerupGiver" || e.thing is "CustomInventory") {
-            if (frandom(0,1) <= symbolchance && symbolcap > 0) {
+            if (frandom(0,1) <= symbolchance && symbolcap != 0) {
                 let symbol = e.thing.Spawn("HolySymbol",e.thing.pos);
                 if (symbol) {
                     symbol.vel = (frandom(-4,4),frandom(-4,4),4);
-                    symbolcap -= 1;
+                    if (symbolcap > 0) {
+                        symbolcap -= 1;
+                    }
                 }
             }
 
