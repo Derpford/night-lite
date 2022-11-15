@@ -41,20 +41,22 @@ class CurseHandler : EventHandler {
             Array<Actor> toraise; // Queue up corpses to raise.
             for (int i = 0; i < cursedmobs.size(); i++) {
                 let it = cursedmobs[i];
-                if (it.bCORPSE && !it.InStateSequence(it.curstate, it.ResolveState("XDeath"))) {
-                    if (cursedmobs[i].CanRaise()) {
+                if (it && !it.InStateSequence(it.curstate, it.ResolveState("XDeath"))) {
+                    if (it.bCORPSE && it.CanRaise()) {
                         toraise.push(cursedmobs[i]);
+                    }
                     } else {
                         cursedmobs.delete(i); // If we can't raise it or it's gibbed, take it off the list.
                     }
                 }
-            }
             // Now, if the cursed mob list has more entries than the corpse list...
             if (cursedmobs.size() > toraise.size()) {
                 // ...that must mean some of the cursed mobs are still alive, so we can resurrect everything in the corpse list.
                 for (int i = 0; i < toraise.size(); i++) {
                     toraise[i].RaiseActor(toraise[i]);
                 }
+            } else {
+                console.printf("You feel a little safer.");
             }
             // Finally, set the next resurrection attempt time.
             nextRes += random(35 * 20, 35 * 60);
