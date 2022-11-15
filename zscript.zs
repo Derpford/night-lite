@@ -45,10 +45,10 @@ class CurseHandler : EventHandler {
                     if (it.bCORPSE && it.CanRaise()) {
                         toraise.push(cursedmobs[i]);
                     }
-                    } else {
-                        cursedmobs.delete(i); // If we can't raise it or it's gibbed, take it off the list.
-                    }
+                } else {
+                    cursedmobs.delete(i); // If we can't raise it or it's gibbed, take it off the list.
                 }
+            }
             // Now, if the cursed mob list has more entries than the corpse list...
             if (cursedmobs.size() > toraise.size()) {
                 // ...that must mean some of the cursed mobs are still alive, so we can resurrect everything in the corpse list.
@@ -78,12 +78,41 @@ class CurseMark : Inventory {
 }
 
 class HolySymbol : Inventory {
+    TextureID normIcon;
+    TextureID flashIcon;
+
     default {
         +Inventory.INVBAR;
         Inventory.Amount 1;
         Inventory.MaxAmount 10; // Good luck saving up this many!
         Inventory.PickupMessage "Found a holy symbol.";
         Inventory.Icon "HOLYA0";
+    }
+
+    override void PostBeginPlay() {
+        super.PostBeginPlay();
+        normIcon = TexMan.CheckForTexture("HOLYA0");
+        flashIcon = TexMan.CheckForTexture("HOLYB0");
+    }
+
+    override void DoEffect() {
+        let it = ThinkerIterator.Create("Actor",Thinker.STAT_DEFAULT);
+        Actor mo;
+        bool result = false;
+        while (mo = Actor(it.next())) {
+            if (owner.Vec2To(mo).length() > 256) {
+                continue;
+            }
+            if (mo.CountInv("CurseMark") > 1) {
+                result = true;
+                break;
+            }
+        }
+        if (result && frandom(0,1) < 0.1) {
+            icon = flashIcon;
+        } else {
+            icon = normIcon;
+        }
     }
 
     override bool Use(bool pickup) {
