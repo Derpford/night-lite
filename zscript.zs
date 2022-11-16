@@ -8,6 +8,7 @@ class CurseHandler : EventHandler {
     int nextRes; // When are we gonna try resurrecting again?
     int pause; // The minimum gap between rez attempts. Sometimes increases after cursed monsters are resurrected.
     double pauseUpChance; // How likely is it that the timer will increase?
+    transient CVar debug;
 
     override void OnRegister() {
         cursechance = CVar.GetCVar("nightlite_curse_chance").GetFloat(); //TODO: cvar these
@@ -15,6 +16,7 @@ class CurseHandler : EventHandler {
         symbolcap = CVar.GetCVar("nightlite_symbol_cap").GetInt();
         pauseUpChance = CVar.GetCVar("nightlite_timer_increase_chance").GetFloat();
         pause = CVar.GetCVar("nightlite_timer_start").GetInt();
+        debug = CVar.GetCVar("nightlite_debug",players[consoleplayer]);
         AdvanceResTimer();
     }
 
@@ -31,6 +33,9 @@ class CurseHandler : EventHandler {
             // so let's add it to the cursedmobs list and give it the CurseMark.
             cursedmobs.push(e.thing);
             e.thing.GiveInventory("CurseMark",1);
+            if (debug.GetBool()) {
+                console.printf("A %s was cursed.", e.thing.GetTag());
+            }
         }
         
         if (e.thing is "PowerupGiver" || e.thing is "CustomInventory") {
@@ -53,6 +58,9 @@ class CurseHandler : EventHandler {
             for (int i = 0; i < cursedmobs.size(); i++) {
                 let it = cursedmobs[i];
                 if (it && !it.InStateSequence(it.curstate, it.ResolveState("XDeath"))) {
+                    if (debug.GetBool()) {
+                        console.printf("Found a cursed %s in a state other than XDeath. Its health is %d.",it.GetTag(),it.health);
+                    }
                     if (it.bCORPSE && it.CanRaise()) {
                         toraise.push(cursedmobs[i]);
                     }
