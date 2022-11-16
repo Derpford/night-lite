@@ -19,7 +19,7 @@ class CurseHandler : EventHandler {
     }
 
     void AdvanceResTimer(bool advance = false) {
-        nextRes = random(35 * pause, 35 * pause * 3); 
+        nextRes += random(35 * pause, 35 * pause * 3); 
         if (advance && frandom(0,1) <= pauseUpChance) {
             pause += 1;
         }
