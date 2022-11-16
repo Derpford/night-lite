@@ -1,6 +1,26 @@
-AddOptionMenu "OptionsMenu" {
-    StaticText "=== Night-Lite Options ==="
+OptionMenu "NightLiteMenu" {
+    Title "Night-Lite Options"
     Slider "Cursed Enemy Chance", "nightlite_curse_chance",0.0,1.0,0.05,2
+    StaticText "The chance that a given enemy will be Cursed with Eternal Life."
+    StaticText ""
     Slider "Holy Symbol Chance", "nightlite_symbol_chance",0.0,1.0,0.05,2
+    StaticText "The chance that a Holy Symbol will spawn near a PowerupGiver or a CustomInventory."
+    StaticText ""
     ScaleSlider "Holy Symbol Cap", "nightlite_symbol_cap",-1,5,1,"Disable Holy Symbol","No Spawn Cap"
+    StaticText "The number of Holy Symbols that can spawn in a single level."
+    StaticText "You can also disable the cap, or disable Holy Symbols entirely."
+    StaticText "" 
+    Slider "Initial Curse Timer", "nightlite_timer_start",1,120,1,0
+    StaticText "The minimum time, in seconds, before the curse first triggers."
+    StaticText "The actual time can go up to 3 times longer."
+    StaticText "I seriously recommend not setting this lower than 1. For your sanity."
+    StaticText ""
+    Slider "Interval Increase Chance", "nightlite_timer_increase_chance",0.0,1.0,0.05,2
+    StaticText "Each time the curse triggers, there's a chance it'll take longer to trigger again."
+    StaticText "This slider controls that chance. Set higher to make things easier as time goes on."
+    StaticText "The time interval resets at the start of each level!"
+}
+
+AddOptionMenu "OptionsMenu" {
+    Submenu "Night-Lite Options", "NightLiteMenu"
 }

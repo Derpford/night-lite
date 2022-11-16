@@ -1,3 +1,5 @@
 server float nightlite_curse_chance = 0.3;
 server float nightlite_symbol_chance = 0.5;
 server int nightlite_symbol_cap = 1;
+server int nightlite_timer_start = 20;
+server float nightlite_timer_increase_chance = 0.3;

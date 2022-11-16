@@ -6,12 +6,23 @@ class CurseHandler : EventHandler {
     double symbolchance; // 0.0 to 1.0, how likely is a powerup or custominventory to have a holy symbol next to it? 
     int symbolcap; // How many symbols are allowed to spawn per map?
     int nextRes; // When are we gonna try resurrecting again?
+    int pause; // The minimum gap between rez attempts. Sometimes increases after cursed monsters are resurrected.
+    double pauseUpChance; // How likely is it that the timer will increase?
 
     override void OnRegister() {
         cursechance = CVar.GetCVar("nightlite_curse_chance").GetFloat(); //TODO: cvar these
         symbolchance = CVar.GetCVar("nightlite_symbol_chance").GetFloat();
         symbolcap = CVar.GetCVar("nightlite_symbol_cap").GetInt();
-        nextRes = random(35 * 20, 35 * 60); 
+        pauseUpChance = CVar.GetCVar("nightlite_timer_increase_chance").GetFloat();
+        pause = CVar.GetCVar("nightlite_timer_start").GetInt();
+        AdvanceResTimer();
+    }
+
+    void AdvanceResTimer(bool advance = false) {
+        nextRes = random(35 * pause, 35 * pause * 3); 
+        if (advance && frandom(0,1) <= pauseUpChance) {
+            pause += 1;
+        }
     }
 
     override void WorldThingSpawned(WorldEvent e) {
@@ -59,7 +70,7 @@ class CurseHandler : EventHandler {
                 console.printf("You feel a little safer.");
             }
             // Finally, set the next resurrection attempt time.
-            nextRes += random(35 * 20, 35 * 60);
+            AdvanceResTimer(true);
         }
     }
 }
