@@ -114,7 +114,7 @@ class HolySymbol : Inventory {
             if (owner.Vec2To(mo).length() > 256) {
                 continue;
             }
-            if (mo.CountInv("CurseMark") > 1) {
+            if (mo.CountInv("CurseMark") >= 1) {
                 result = true;
                 break;
             }
